@@ -8,12 +8,12 @@ public class Prueba {
 
     public static void main(String[] args) {
         
-        // int T; // Nivel de Carga al que se quiere llegar
-        // int S; // Carga Inicial
-        // int C; // Nivel Actual de Carga
-        // int R; // Tasa de carga (Unidades por mínuto)
+        // T = Nivel de Carga al que se quiere llegar
+        // S = Carga Inicial
+        // C = Nivel Actual de Carga
+        // R = Tasa de carga (Unidades por mínuto)
         
-        ArrayList<Query> Q = new ArrayList<>(); // número de consultas
+        ArrayList<Query> Q; // número de consultas
         
         Q = crearQueries();
         
@@ -23,46 +23,50 @@ public class Prueba {
     }
     
     public static void calcularMinutos(Query query) {
-        int minutes = 0;
+        double minutos = 0;
         
-        int C = query.S;
-        int R;
+        double[] unidadesPorRango = identificarRangoDeUnidades(query);
         
-        while (C < query.T) {     
-            R = calcularR(C);
-            
-            C += R;
-            
-            minutes++;
-        }
+        minutos = (unidadesPorRango[0] / 10)
+                + (unidadesPorRango[1] / 5)
+                + (unidadesPorRango[2] / 8)
+                + (unidadesPorRango[3] / 2)
+                + (unidadesPorRango[4] / 7)
+                + (unidadesPorRango[5] / 8)
+                + (unidadesPorRango[6] / 3);
         
-        System.out.println(minutes);
+        int minutosEnteros = (int) Math.ceil(minutos);
+        
+        // System.out.println(minutos);
+        System.out.println(minutosEnteros);
     }
     
-    public static int calcularR(int C) {
-        int R = 0;
+    public static double[] identificarRangoDeUnidades(Query query) {
+        double[] rangos = {0, 0, 0, 0, 0, 0, 0};
         
-        if (C >= 0 && C <= 10) {
-            R = 10;
-        } else if (C >= 11 && C <= 230) {
-            R = 5;
-        } else if (C >= 231 && C <= 559) {
-            R = 8;
-        } else if (C >= 560 && C <= 1009) {
-            R = 2;
-        } else if (C >= 1010 && C <= 5000) {
-            R = 7;
-        } else if (C >= 5001 && C <= 10000) {
-            R = 8;
-        } else if (C >= 10001 && C <= Math.pow(10, 9)) {
-            R = 3;
+        for (int i = query.S; i < query.T; i++) {
+            if (i >= 0 && i <= 10) {
+                rangos[0]++;
+            } else if (i >= 11 && i <= 230) {
+                rangos[1]++;
+            } else if (i >= 231 && i <= 559) {
+                rangos[2]++;
+            } else if (i >= 560 && i <= 1009) {
+                rangos[3]++;
+            } else if (i >= 1010 && i <= 5000) {
+                rangos[4]++;
+            } else if (i >= 5001 && i <= 10000) {
+                rangos[5]++;
+            } else if (i >= 10001 && i <= Math.pow(10, 9)) {
+                rangos[6]++;
+            }
         }
         
-        return R;
+        return rangos;
     }
     
     public static ArrayList<Query> crearQueries() {
-        System.out.println("¿Cuántas consulatas quieres hacer?");
+        System.out.println("¿Cuántas consultas quieres hacer?");
         int cantidadConsultas = scan.nextInt();
         ArrayList<Query> queries = new ArrayList<>();
         
